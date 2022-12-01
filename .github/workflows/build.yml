@@ -1,0 +1,26 @@
+name: Spresense-Build-check(base)
+on:
+  push:
+jobs:
+  build:
+    name: Build sumple project
+    runs-on: ubuntu-latest
+    steps:
+      - name: step0 - checkout
+        uses: actions/checkout@v1
+      - name: step1 - install-tools
+        run: |
+         wget https://raw.githubusercontent.com/sonydevworld/spresense/master/install-tools.sh
+         bash install-tools.sh
+      - name: step2 - Download the source code
+        run: git clone --recursive https://github.com/sonydevworld/spresense.git
+      - name: step3 - configure
+        run: |
+         source ~/spresenseenv/setup
+         python3 tools/config.py examples/hello
+        working-directory: ./spresense/sdk
+      - name: step4 - build
+        run: |
+         source ~/spresenseenv/setup;
+         make -j
+        working-directory: ./spresense/sdk
